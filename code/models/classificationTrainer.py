@@ -32,6 +32,7 @@ class Trainer(object):
             g.manual_seed(0)
             for images, labels in tqdm(train_loader):
                 images = torch.cat((images, images), dim=0)
+                labels=torch.toTensor(labels)
                 labels = torch.cat((labels, labels), dim=0)
                 images = images.to(self.args.get('device'))
                 labels = labels.to(self.args.get('device'))
