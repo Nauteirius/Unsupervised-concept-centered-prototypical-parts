@@ -11,6 +11,7 @@ class ClassificationModel(nn.Module):
         self.resnet_model = models.resnet34(pretrained=True, num_classes=out_dim)
 
         self.backbone = self.resnet_model
+        self.backbone.conv1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False)
 
     def forward(self, x):
         return self.backbone(x)
