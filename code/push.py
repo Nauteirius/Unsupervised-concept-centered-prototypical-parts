@@ -73,11 +73,14 @@ def push_prototypes(dataloader, # pytorch dataloader (must be unnormalized in [0
 
     num_classes = prototype_network_parallel.module.num_classes
 
-    for push_iter, (search_batch_input, search_y) in enumerate(dataloader):
+    for push_iter, (data, label) in enumerate(dataloader):
         '''
         start_index_of_search keeps track of the index of the image
         assigned to serve as prototype
         '''
+        search_batch_input = data['IMG']
+        search_y = label
+        
         start_index_of_search_batch = push_iter * search_batch_size
 
         update_prototypes_on_batch(search_batch_input,

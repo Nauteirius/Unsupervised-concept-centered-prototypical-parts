@@ -175,7 +175,9 @@ class PPNet(nn.Module):
             return self.prototype_activation_function(distances)
 
     def forward(self, x):
+        # activation masks
         distances = self.prototype_distances(x)
+        activation_masks = self.distance_2_similarity(distances) # ours
         '''
         we cannot refactor the lines below for similarity scores
         because we need to return min_distances
@@ -184,10 +186,13 @@ class PPNet(nn.Module):
         min_distances = -F.max_pool2d(-distances,
                                       kernel_size=(distances.size()[2],
                                                    distances.size()[3]))
+        
         min_distances = min_distances.view(-1, self.num_prototypes)
+        
+        # Q
         prototype_activations = self.distance_2_similarity(min_distances)
         logits = self.last_layer(prototype_activations)
-        return logits, min_distances
+        return logits, min_distances, prototype_activations, activation_masks
 
     def push_forward(self, x):
         '''this method is needed for the pushing operation'''
